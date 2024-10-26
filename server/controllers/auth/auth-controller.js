@@ -60,6 +60,7 @@ const loginUser = async (req, res) => {
             id: checkUser._id,
             role: checkUser.role,
             email: checkUser.email,
+            username: checkUser.username
         }, "CLIENT_SECRET_KEY")
 
         res.cookie("token", token).json({
@@ -69,6 +70,7 @@ const loginUser = async (req, res) => {
                 id: checkUser._id,
                 role: checkUser.role,
                 email: checkUser.email,
+                username: checkUser.username
             }
         })
     } catch (error) {
