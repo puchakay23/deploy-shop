@@ -4,10 +4,41 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { useToast } from "@/hooks/use-toast";
+import { setProductDetails } from "@/store/shop/products-slice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  function handleAddToCart(getCurrentProductId) {
+    console.log(getCurrentProductId);
+    dispatch(
+      addToCart({
+        userId: user.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product added to cart",
+        });
+      }
+    });
+  }
+
+  function handleDialogueClose() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogueClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[60vw]">
         <div className="relative overflow-hidden rounded-lg flex items-center">
           <img
@@ -28,12 +59,12 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="flex items-center justify-between">
             <p
               className={`text-3xl font-bold text-primary ${
-                productDetails.salePrice > 0 ? "line-through" : ""
+                productDetails?.salePrice > 0 ? "line-through" : ""
               }`}
             >
               ${productDetails?.price}
             </p>
-            {productDetails.salePrice > 0 ? (
+            {productDetails?.salePrice > 0 ? (
               <p className={`text-2xl font-bold text-muted-foreground `}>
                 ${productDetails?.salePrice}
               </p>
@@ -50,7 +81,12 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <span>(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button className="w-full">Add to cart</Button>
+            <Button
+              className="w-full"
+              onClick={() => handleAddToCart(productDetails?._id)}
+            >
+              Add to cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">
