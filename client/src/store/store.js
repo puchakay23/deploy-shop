@@ -3,13 +3,15 @@ import autheducer from "./auth-slice"
 import adminProductSlice from "./admin/products-slice"
 import shopProductSlice from "./shop/products-slice"
 import shopCartSlice from "./shop/cart-slice"
+import shopAddressSlice from "./shop/address-slice"
 
 const store = configureStore({
     reducer: {
         auth: autheducer,
         adminProducts: adminProductSlice,
         shopProducts: shopProductSlice,
-        shopCart: shopCartSlice
+        shopCart: shopCartSlice,
+        shopAddress: shopAddressSlice
     }
 })
 
