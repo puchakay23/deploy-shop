@@ -1,9 +1,11 @@
-import React from 'react'
+import Orders from "@/components/admin/orders";
 
 const AdminOrders = () => {
   return (
-    <div>AdminOrders</div>
-  )
-}
+    <div>
+      <Orders />
+    </div>
+  );
+};
 
-export default AdminOrders
+export default AdminOrders;
