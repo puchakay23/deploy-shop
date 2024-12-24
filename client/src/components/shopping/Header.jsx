@@ -31,7 +31,9 @@ function MenuItems() {
   function handleNavigate(getCurrentItem) {
     sessionStorage.removeItem("filters");
     const currentFilter =
-      getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
+      getCurrentItem.id !== "home" &&
+      getCurrentItem.id !== "products" &&
+      getCurrentItem.id !== "search"
         ? {
             category: [getCurrentItem.id],
           }
@@ -80,8 +82,12 @@ function HeaderRightContent() {
           variant="outline"
           size="icon"
           onClick={() => setOpenCartSheet(true)}
+          className="relative"
         >
           <ShoppingCart className="h-6 w-6" />
+          <span className="absolute top-[-5px] right-[2px] text-sm font-bold">
+            {cartItems?.items?.length || 0}
+          </span>
           <span className="sr-only">Shopping cart</span>
         </Button>
         <UserCartWrapper
